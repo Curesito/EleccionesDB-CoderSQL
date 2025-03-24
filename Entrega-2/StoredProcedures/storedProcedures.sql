@@ -22,34 +22,6 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE InsertarCandidato(
-    IN p_canNombreCompleto VARCHAR(100), 
-    IN p_partidoID INT, 
-    IN p_eleccionID INT, 
-    IN p_cargoID INT, 
-    IN p_porcentaje DECIMAL(5,2), 
-    IN p_posicion INT
-)
-BEGIN
-    DECLARE v_candidatoID INT;
-    
-    -- Insercion de datos en candidatos
-    INSERT INTO Candidato (canNombreCompleto, partidoID) 
-    VALUES (p_canNombreCompleto, p_partidoID);
-    
-    -- ID = el ultimo ID
-    SET v_candidatoID = LAST_INSERT_ID();
-    
-    -- Insercion de datos en postulacion
-    INSERT INTO Postulacion (eleccionID, candidatoID, cargoID, porcentaje, posicion) 
-    VALUES (p_eleccionID, v_candidatoID, p_cargoID, p_porcentaje, p_posicion);
-END //
-
-DELIMITER ;
-
-
-DELIMITER //
-
 CREATE PROCEDURE AgregarVotante(
     IN p_votDNI VARCHAR(20),
     IN p_votNombreCompleto VARCHAR(100),
