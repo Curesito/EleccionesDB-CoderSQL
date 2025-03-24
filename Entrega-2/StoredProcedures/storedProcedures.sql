@@ -47,7 +47,6 @@ END $$
 
 DELIMITER ;
 
-CALL InsertarCandidato('Juan Pérez', 2, 1, 3, 0, NULL);
 
 CALL AgregarVotante ( 45555233, 'Laura Fernández', 24, 'laufer@mail.com', 451222123);
 
