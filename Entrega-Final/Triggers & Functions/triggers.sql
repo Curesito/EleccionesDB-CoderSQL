@@ -23,7 +23,7 @@ CREATE TRIGGER ActualizarTotalVotos
 AFTER INSERT ON Voto
 FOR EACH ROW
 BEGIN
-    -- Actualiza el número de votos totales para una elección específica
+
     UPDATE Eleccion
     SET totalVotos = (
         SELECT COUNT(*) FROM Voto WHERE eleccionID = NEW.eleccionID
