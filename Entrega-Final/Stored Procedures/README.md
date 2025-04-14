@@ -6,6 +6,7 @@ Funcionamiento: Selecciona la tabla de postulacion usando JOIN en las tablas de 
 
 Output: Candidatos en base a la eleccionID elegida de manera ascendente
 
+--------------------------------------------------------------------------------------------------------------------------------
 
 AgregarVotante: Agrega un nuevo votante en la base de datos
 
@@ -13,6 +14,7 @@ Funcionamiento: Inserta el registro de un nuevo Votante con la informacion de en
 
 Resultado: Agrega un nuevo votante
 
+--------------------------------------------------------------------------------------------------------------------------------
 
 RegistrarVoto: Registra un voto para un candidato en una eleccion especifica, actualiza el total y calcula el porcentaje y posiciones de los candidatos.
 
