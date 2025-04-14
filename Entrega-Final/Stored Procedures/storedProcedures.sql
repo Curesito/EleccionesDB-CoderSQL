@@ -47,26 +47,20 @@ CREATE PROCEDURE RegistrarVoto(
 BEGIN
     DECLARE totalVotos INT;
 
-    -- Iniciar la transacción
     START TRANSACTION;
 
-    -- Inserción del voto
     INSERT INTO Voto (eleccionID, candidatoID, fechaVoto)
     VALUES (p_eleccionID, p_candidatoID, p_fechaVoto);
 
-    -- Obtener el total de votos para la elección
     SELECT COUNT(*) INTO totalVotos
     FROM Voto
     WHERE eleccionID = p_eleccionID;
 
-    -- Actualización del total de votos en la tabla Elección
     UPDATE Eleccion
     SET totalVotos = totalVotos
     WHERE eleccionID = p_eleccionID;
 
-    -- No actualizar la tabla Postulacion directamente dentro del procedimiento,
-    -- primero se calcula el porcentaje de los votos
-    -- Actualización de porcentaje de votos por candidato
+
     UPDATE Postulacion p
     SET porcentaje = (
         SELECT IFNULL((COUNT(*) / totalVotos * 100), 0)
@@ -75,27 +69,21 @@ BEGIN
     )
     WHERE p.eleccionID = p_eleccionID;
 
-    -- Actualización de las posiciones (sin modificar la tabla Postulacion en un trigger)
-    -- Primero actualizamos la tabla con las posiciones corregidas
     DROP TEMPORARY TABLE IF EXISTS TempPosiciones;
     CREATE TEMPORARY TABLE TempPosiciones (
         postulacionID INT,
         nuevaPosicion INT
     );
 
-    -- Generar nuevas posiciones basadas en los porcentajes de votos
     INSERT INTO TempPosiciones (postulacionID, nuevaPosicion)
     SELECT postulacionID,
            ROW_NUMBER() OVER (ORDER BY porcentaje DESC)
     FROM Postulacion
     WHERE eleccionID = p_eleccionID;
-
-    -- Actualizamos la tabla Postulacion usando las posiciones calculadas
     UPDATE Postulacion p
     JOIN TempPosiciones tp ON p.postulacionID = tp.postulacionID
     SET p.posicion = tp.nuevaPosicion;
 
-    -- Finalizamos la transacción
     COMMIT;
 
 END $$
